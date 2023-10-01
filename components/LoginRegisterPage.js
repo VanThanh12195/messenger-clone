@@ -3,27 +3,17 @@
 import { signIn } from "next-auth/react";
 
 import { useState } from "react";
+import toast from "react-hot-toast";
 
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
-import React from 'react'
-
 
 export default function LoginRegisterPage() {
-
-
-  
-
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
 
   const [variant, setVariant] = useState("LOGIN");
-
-  const searchParams = useSearchParams();
 
   function handleRegister() {
     variant === "LOGIN" ? setVariant("REGISTER") : setVariant("LOGIN");
@@ -34,15 +24,14 @@ export default function LoginRegisterPage() {
     signIn(providerId, { callbackUrl: "/chatroom" });
   };
 
-  const [error, setError] = useState();
   const [formData, setFormData] = useState({
+    name: "",
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setError();
     setFormData({
       ...formData,
       [name]: value,
@@ -53,24 +42,50 @@ export default function LoginRegisterPage() {
     e.preventDefault();
 
     setLoading(true);
+    if (variant === "REGISTER") {
+      var bcrypt = require("bcryptjs");
+      var passwordHash = bcrypt.hashSync(formData.password, 10);
 
-    formData["_id"] = formData.email;
+      formData["password"] = passwordHash;
 
-    let response = await signIn("credentials", {
-      callbackUrl: searchParams.get("callbackUrl"),
-      email: formData.email,
-      redirect: false,
-      password: formData.password,
-    });
+      const axios = require("axios");
 
-    setLoading(false);
+      axios
+        .post("/api/register", formData)
+        .then(function (response) {
+          if (response.status === 200) toast.success(response.data);
+        })
+        .catch(function (error) {
+          if (error.response.status === 409) toast.error(error.response.data);
+        })
+        .finally(function () {
+          setVariant("LOGIN");
+          setLoading(false); 
+          setFormData({
+            name: "",
+            email: formData.email,
+            password: "",
+          });
+        });
+    } else {
+      formData["_id"] = formData.email;
 
-    if (response.url) {
-      console.log("url is " + response.url);
-      // router.push(response.url);
-      // window.location.href = response.url;
-      window.location.replace(response.url);
-    } else setError("Please check your email or password!");
+      let response = await signIn("credentials", {
+        callbackUrl: "/chatroom",
+        email: formData.email,
+        redirect: false,
+        password: formData.password,
+      });
+
+      setLoading(false);
+
+      // if (response.url) {
+      //   console.log("url is " + response.url);
+      //   // router.push(response.url);
+      //   // window.location.href = response.url;
+      //   window.location.replace(response.url);
+      // } else setError("Please check your email or password!");
+    }
   };
 
   return (
@@ -99,9 +114,10 @@ export default function LoginRegisterPage() {
                   type="text"
                   autoComplete="name"
                   required
+                  placeholder="Your Username"
                   value={formData.name}
                   onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -121,9 +137,10 @@ export default function LoginRegisterPage() {
                 type="email"
                 autoComplete="email"
                 required
+                placeholder="Your Email Address"
                 value={formData.email}
                 onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block pl-3 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -152,9 +169,10 @@ export default function LoginRegisterPage() {
                 type="password"
                 autoComplete="current-password"
                 required
+                placeholder="••••••••••••••••••••"
                 value={formData.password}
                 onChange={handleChange}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full pl-3 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -168,6 +186,8 @@ export default function LoginRegisterPage() {
                 ? loading
                   ? "Signing in..."
                   : "Sign In"
+                : loading
+                ? "Registering"
                 : "Register"}
             </button>
           </div>
@@ -222,16 +242,6 @@ export default function LoginRegisterPage() {
             </p>
           )}
         </div>
-
-        {error && (
-          <div
-            className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mt-4"
-            role="alert"
-          >
-            <strong className="font-bold">Error: </strong>
-            <span className="block sm:inline">{error}</span>
-          </div>
-        )}
       </div>
     </div>
   );

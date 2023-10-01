@@ -71,16 +71,26 @@ export async function POST(request) {
     await client.connect();
 
     // Database reference with creation if it does not already exist
-    const db = client.db(`Database-Nextjs`);
+    const db = client.db("Messenger-Clone");
     console.log(`New database:\t${db.databaseName}\n`);
 
     // Collection reference with creation if it does not already exist
-    const collection = db.collection("users");
+    const collection = db.collection("Users");
     console.log(`New collection:\t${collection.collectionName}\n`);
+
+    const checkEmail = await collection.findOne({ email: user.email });
+
+    if (checkEmail)
+      return NextResponse.json(
+        "This email is already associated with an account.",
+        { status: 409 }
+      );
 
     const response = await collection.insertOne(user);
 
-    return NextResponse.json(response);
+    console.log(JSON.stringify(response));
+
+    return NextResponse.json("User registration successful!");
   } catch (error) {
     return NextResponse.json(error);
   } finally {
