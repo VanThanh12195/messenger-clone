@@ -10,8 +10,10 @@ import Image from "next/image";
 
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
+import React from 'react'
 
-export default function HomePage() {
+
+export default function LoginRegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -24,7 +26,8 @@ export default function HomePage() {
   }
 
   const handleSignInWithProvider = (providerId) => {
-    signIn(providerId, { callbackUrl: searchParams.get("callbackUrl") });
+    signIn(providerId)
+    // signIn(providerId, { callbackUrl: searchParams.get("callbackUrl") });
   };
 
   const [error, setError] = useState();
@@ -175,7 +178,7 @@ export default function HomePage() {
         {/* Add Facebook Sign In */}
         <button
           type="button"
-          onClick={() => handleSignInWithProvider("github")}
+          onClick={() => handleSignInWithProvider("facebook")}
           className="flex w-full justify-center rounded-md bg-sky-700 px-3 py-2 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-sky-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 "
         >
           <BsFacebook size={25} className="mr-2" />

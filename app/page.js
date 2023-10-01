@@ -1,10 +1,9 @@
-import HomePage from "@/components/HomePage"
-
+import LoginRegisterPage from "./(site)/LoginRegisterPage"
 
 export default function Home() {
   return (
     <main>
-      <HomePage/>
+      <LoginRegisterPage/>
     </main>
   )
 }
