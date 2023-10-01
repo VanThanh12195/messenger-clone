@@ -157,7 +157,11 @@ export default function HomePage() {
               type="submit"
               className="flex justify-center items-center flex-grow flex-shrink-0 min-w-0 rounded-md bg-indigo-600 px-6 py-2 text-lg font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {variant === "LOGIN"
+                ? loading
+                  ? "Signing in..."
+                  : "Sign In"
+                : "Register"}
             </button>
           </div>
         </form>
