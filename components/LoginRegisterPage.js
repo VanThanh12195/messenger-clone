@@ -14,6 +14,10 @@ import React from 'react'
 
 
 export default function LoginRegisterPage() {
+
+
+  
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -26,8 +30,8 @@ export default function LoginRegisterPage() {
   }
 
   const handleSignInWithProvider = (providerId) => {
-    signIn(providerId)
     // signIn(providerId, { callbackUrl: searchParams.get("callbackUrl") });
+    signIn(providerId, { callbackUrl: "/chatroom" });
   };
 
   const [error, setError] = useState();
