@@ -1,6 +1,7 @@
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
+import getUserCollection from "@/utils/getUserCollection";
 
 export const options = {
   providers: [
@@ -21,20 +22,34 @@ export const options = {
       async authorize(credentials) {
         const { email, password } = credentials;
 
-        const axios = require("axios");
+        let bcrypt = require("bcryptjs");
 
-        let response = await axios.get("http://localhost:3000/api/register", {
-          params: {
+        const [client, collection] = await getUserCollection();
+
+        try {
+          let userFound = await collection.findOne({
             email: email,
-            password: password,
-          },
-        });
+          });
 
-        if (response.data.error) {
-          return null;
+          if (!userFound) {
+            client.close();
+            return null;
+          }
+
+          const isValid = bcrypt.compareSync(password, userFound.password);
+
+          if (!isValid) {
+            client.close();
+            return null;
+          }
+
+          return {...credentials, name: userFound.name};
+
+        } catch (error) {
+          return error;
+        } finally {
+          client.close();
         }
-
-        return response.data;
       },
     }),
   ],

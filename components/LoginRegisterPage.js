@@ -20,7 +20,6 @@ export default function LoginRegisterPage() {
   }
 
   const handleSignInWithProvider = (providerId) => {
-    // signIn(providerId, { callbackUrl: searchParams.get("callbackUrl") });
     signIn(providerId, { callbackUrl: "/chatroom" });
   };
 
@@ -42,6 +41,7 @@ export default function LoginRegisterPage() {
     e.preventDefault();
 
     setLoading(true);
+
     if (variant === "REGISTER") {
       var bcrypt = require("bcryptjs");
       var passwordHash = bcrypt.hashSync(formData.password, 10);
@@ -68,7 +68,6 @@ export default function LoginRegisterPage() {
           });
         });
     } else {
-      formData["_id"] = formData.email;
 
       let response = await signIn("credentials", {
         callbackUrl: "/chatroom",
@@ -79,12 +78,12 @@ export default function LoginRegisterPage() {
 
       setLoading(false);
 
-      // if (response.url) {
-      //   console.log("url is " + response.url);
-      //   // router.push(response.url);
-      //   // window.location.href = response.url;
-      //   window.location.replace(response.url);
-      // } else setError("Please check your email or password!");
+      if (response.url) {
+        toast.success('You are successfully logged in');
+        window.location.replace(response.url);
+      } else toast.error('Please check your Email address or Password');
+      
+
     }
   };
 
