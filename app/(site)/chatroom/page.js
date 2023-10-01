@@ -8,6 +8,9 @@ export default async function page() {
 
   const session = await getServerSession(options);
 
+
+  console.log('session is ' + JSON.stringify(session));
+
   return (
     <div>
       <p>
