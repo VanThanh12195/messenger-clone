@@ -12,12 +12,12 @@ export default async function page() {
   console.log('session is ' + JSON.stringify(session));
 
   return (
-    <div>
+    <>
       <p>
         You are signed in as <strong>{session?.user.name}</strong>.
       </p>
       <ChatRoom />
       <ButtonSignOut/>
-    </div>
+    </>
   );
 }

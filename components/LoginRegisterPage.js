@@ -9,8 +9,11 @@ import Image from "next/image";
 
 import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
+import getRandomUserImageUrl from "@/utils/getRandomUserImageUrl";
 
 export default function LoginRegisterPage() {
+  console.log(getRandomUserImageUrl());
+
   const [loading, setLoading] = useState(false);
 
   const [variant, setVariant] = useState("LOGIN");
