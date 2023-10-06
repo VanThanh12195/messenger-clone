@@ -11,8 +11,38 @@ import { FcGoogle } from "react-icons/fc";
 import { BsFacebook } from "react-icons/bs";
 import getRandomUserImageUrl from "@/utils/getRandomUserImageUrl";
 
+import { PrismaClient } from "@prisma/client";
+
 export default function LoginRegisterPage() {
-  console.log(getRandomUserImageUrl());
+
+  
+  const prisma = new PrismaClient();
+
+  async function main() {
+    // const user = await prisma.user.create({
+    //   data: {
+    //     name: "Rich",
+    //     email: "hello@prisma.com",
+    //     posts: {
+    //       create: {
+    //         title: "My first post",
+    //         body: "Lots of really interesting stuff",
+    //         slug: "my-first-post",
+    //       },
+    //     },
+    //   },
+    // });
+  }
+
+  main()
+    .then(async () => {})
+    .catch(async (e) => {
+      console.error(e);
+    });
+
+
+
+
 
   const [loading, setLoading] = useState(false);
 
