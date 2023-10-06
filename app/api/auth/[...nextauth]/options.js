@@ -1,7 +1,8 @@
 import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import getUserCollection from "@/utils/getUserCollection";
+
+import { PrismaClient } from "@prisma/client";
 
 export const options = {
   providers: [
@@ -20,36 +21,29 @@ export const options = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
+
+        const prisma = new PrismaClient();
+
         const { email, password } = credentials;
 
         let bcrypt = require("bcryptjs");
 
-        const [client, collection] = await getUserCollection();
-
-        try {
-          let userFound = await collection.findOne({
+        const userFoundbyEmail = await prisma.user.findUnique({
+          where: {
             email: email,
-          });
+          },
+        });
 
-          if (!userFound) {
-            client.close();
-            return null;
-          }
+        if (!userFoundbyEmail) return null;
 
-          const isValid = bcrypt.compareSync(password, userFound.password);
+        const isValidPassword = bcrypt.compareSync(
+          password,
+          userFoundbyEmail.hashedPassword
+        );
 
-          if (!isValid) {
-            client.close();
-            return null;
-          }
+        if (!isValidPassword) return null;
 
-          return {...credentials, name: userFound.name};
-
-        } catch (error) {
-          return error;
-        } finally {
-          client.close();
-        }
+        return { ...credentials, name: userFoundbyEmail.name, image: userFoundbyEmail.image };
       },
     }),
   ],
