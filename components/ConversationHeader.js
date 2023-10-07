@@ -2,6 +2,8 @@
 import { MdOutlineOpenInNew } from "react-icons/md";
 
 import getServerSideSession from "@/utils/getServerSideSession";
+
+
 export default async function ConversationHeader() {
 
   const session = await getServerSideSession();

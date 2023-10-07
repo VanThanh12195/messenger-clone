@@ -18,10 +18,8 @@ model User {
   hashedPassword String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
-
   conversationIds String[]       @db.ObjectId
   conversations   Conversation[] @relation(fields: [conversationIds], references: [id])
-
   seenMessageIds String[]  @db.ObjectId
   seenMessages   Message[] @relation("Seen", fields: [seenMessageIds], references: [id])
 
@@ -34,10 +32,8 @@ model Conversation {
   lastMessageAt DateTime @default(now())
   name          String?
   isGroup       Boolean?
-
   messagesIds String[]  @db.ObjectId
   messages    Message[]
-
   userIds String[] @db.ObjectId
   users   User[]   @relation(fields: [userIds], references: [id])
 }
@@ -48,13 +44,10 @@ model Message {
   image     String?
   document  String?
   createdAt DateTime @default(now())
-
   seenIds String[] @db.ObjectId
   seen    User[]   @relation("Seen", fields: [seenIds], references: [id])
-
   conversationId String       @db.ObjectId
   conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
-
   senderId String @db.ObjectId
   sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
