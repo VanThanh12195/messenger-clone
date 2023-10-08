@@ -13,12 +13,6 @@ import getRandomUserImageUrl from "@/utils/getRandomUserImageUrl";
 
 export default function LoginRegisterPage() {
 
-
-
-
-
-
-
   const [loading, setLoading] = useState(false);
 
   const [variant, setVariant] = useState("LOGIN");

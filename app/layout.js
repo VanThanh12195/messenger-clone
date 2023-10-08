@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
+import AuthProvider from "@/components/AuthProviders";
 
 export const metadata = {
   title: "Messenger Clone",
@@ -10,8 +11,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Toaster />
-        {children}
+        <AuthProvider>
+          <Toaster />
+          {children}{" "}
+        </AuthProvider>
       </body>
     </html>
   );

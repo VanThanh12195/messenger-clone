@@ -14,13 +14,13 @@ export default function ChatRoom() {
             <section>
               <ConversationHeader />
               <ConversationSearchBar />
-              <div className="p-2 flex-1 overflow-y-scroll">
+              <div className="p-2 flex-1">
                 <ConversationList />
               </div>
             </section>
             <section className="flex flex-col flex-auto border-l border-gray-800">
               <ChatHeader />
-              <div className="p-4 flex-1 overflow-y-scroll">
+              <div className="p-4 flex-1">
                 <MessageList />
               </div>
               <MessengerInput />
