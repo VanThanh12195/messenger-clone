@@ -4,9 +4,9 @@ import ConversationSearchBar from "./ConversationSearchBar";
 import ChatHeader from "./ChatHeader";
 import MessengerInput from "./MessengerInput";
 import MessageList from "./MessageList";
+import getAllConversation from "@/utils/getAllConversation";
 
 export default function ChatRoom() {
-
   return (
     <>
       <div className="h-screen w-full flex">

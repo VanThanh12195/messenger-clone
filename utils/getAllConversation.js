@@ -14,11 +14,12 @@ export default async function getAllConversation() {
     },
     select: {
       id: true,
+      isGroup:true,
       userIds: true,
       lastMessage:true,
       lastMessageAt: true,
     },
   });
 
-  return <div>getAllConversation</div>;
+  return conversations
 }
