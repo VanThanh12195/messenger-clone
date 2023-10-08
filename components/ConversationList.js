@@ -1,17 +1,16 @@
+import getAllConversation from "@/utils/getAllConversation";
 import Conversation from "./Conversation";
+import ConversationNew from "./ConversationNew";
 
-export default function ConversationList() {
+export default async function ConversationList() {
+
+  const conversations = await getAllConversation()
+
+  
+
   return (
     <div>
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
-      <Conversation />
+      
     </div>
   );
 }

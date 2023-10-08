@@ -4,9 +4,15 @@ import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { IoMdClose } from "react-icons/io";
 import { MdOutlineOpenInNew } from "react-icons/md";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export default function MessageModal() {
   let [isOpen, setIsOpen] = useState(false);
+  const [email, setEmail] = useState("");
+
+  const router = useRouter();
 
   function closeModal() {
     setIsOpen(false);
@@ -14,7 +20,30 @@ export default function MessageModal() {
 
   function openModal() {
     setIsOpen(true);
+    setEmail("");
   }
+
+  function sendMessage() {
+    if (email === "") toast.error("Please input email!");
+    else {
+      axios
+        .post("/api/chat/conversation", { email })
+        .then(function (response) {
+          if (response.status === 200) router.push(`/chatroom/${response.data}`)
+          setIsOpen(false);
+        })
+        .catch(function (error) {
+          if (error.response.status === 404) toast.error(error.response.data);
+        })
+        .finally(function () {
+          setEmail("");
+        });
+    }
+  }
+
+  const handleEmailChange = (event) => {
+    setEmail(event.target.value);
+  };
 
   return (
     <>
@@ -71,6 +100,8 @@ export default function MessageModal() {
                       </label>
                       <input
                         type="email"
+                        value={email}
+                        onChange={handleEmailChange}
                         id="input-label"
                         className="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
                         placeholder="johndoe@gmail.com"
@@ -87,7 +118,7 @@ export default function MessageModal() {
                       </button>
                       <button
                         className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
-                        onClick={closeModal}
+                        onClick={sendMessage}
                       >
                         Send
                       </button>

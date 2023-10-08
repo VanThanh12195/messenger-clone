@@ -13,7 +13,7 @@ export default function RootLayout({ children }) {
       <body>
         <AuthProvider>
           <Toaster />
-          {children}{" "}
+          {children}
         </AuthProvider>
       </body>
     </html>

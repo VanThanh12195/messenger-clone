@@ -6,6 +6,7 @@ import MessengerInput from "./MessengerInput";
 import MessageList from "./MessageList";
 
 export default function ChatRoom() {
+
   return (
     <>
       <div className="h-screen w-full flex">
