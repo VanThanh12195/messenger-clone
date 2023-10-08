@@ -1,10 +1,19 @@
 import { HiMiniPhone } from "react-icons/hi2";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
+import getConversationbyID from "@/utils/getConversationbyID";
+import getCurrentUser from "@/utils/getCurrentUser";
+import getUserbyID from "@/utils/getUserbyID";
 
-export default function ChatHeader({ params }) {
+export default async function ChatHeader({ params }) {
 
-  // console.log(params.conversationID);
+const conversation = await getConversationbyID(params.conversationID);
+  
+const { id } = await getCurrentUser();
+
+const userIdGuest = conversation.userIds.filter((userId) => userId !== id);
+
+const userGuest = await getUserbyID(userIdGuest[0]);
 
   return (
     <div className="px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
@@ -12,12 +21,12 @@ export default function ChatHeader({ params }) {
         <div className="w-12 h-12 mr-4 relative flex flex-shrink-0">
           <img
             className="shadow-md rounded-full w-full h-full object-cover"
-            src="https://randomuser.me/api/portraits/women/33.jpg"
+            src={userGuest.image}
             alt=""
           />
         </div>
         <div className="text-sm">
-          <p className="font-bold">Scarlett Johansson</p>
+          <p className="font-bold">{userGuest.name}</p>
           <p>Active 1h ago</p>
         </div>
       </div>

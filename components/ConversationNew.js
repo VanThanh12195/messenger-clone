@@ -11,7 +11,7 @@ export default async function ConversationNew({ conversation }) {
   const userGuest = await getUserbyID(userIdGuest[0]);
 
   return (
-    <Link href={`/chatroom/${conversationID}`}>
+    <Link href={`/chatroom/${conversationID}` }>
       <div className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg relative w-80 hover:cursor-pointer">
         <div className="w-12 h-12 relative flex flex-shrink-0">
           <img
