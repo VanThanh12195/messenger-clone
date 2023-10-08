@@ -2,7 +2,7 @@ import { HiMiniPhone } from "react-icons/hi2";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
 
-export default async function ChatHeader({ userGuest }) {
+export default function ChatHeader({ userGuest }) {
 
   return (
     <div className="px-6 py-4 flex flex-row flex-none justify-between items-center shadow">

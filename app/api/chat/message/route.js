@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 
 import prisma from "@/utils/getPrismaClient";
-import pusher from "@/utils/getPusherServer";
+import { pusherServer } from "@/utils/getPusherServer";
 
 export async function POST(request) {
-  const { message, currentUserID, conversationID } = await request.json();
+
+  const { message, currentUserID, conversationID, currentUserEmail } =
+    await request.json();
 
   const newMessage = await prisma.message.create({
     data: {
@@ -22,6 +24,13 @@ export async function POST(request) {
     },
   });
 
+console.log(newMessage);
+
+
+const result = await pusherServer.trigger(conversationID, "messages:new", newMessage);
+
+console.log(result);
+
   const conversationUpdated = await prisma.conversation.update({
     where: {
       id: conversationID,
@@ -29,8 +38,13 @@ export async function POST(request) {
     data: {
       lastMessage: message,
       lastMessageAt: new Date(),
+      messages: {
+        connect: {
+          id: newMessage.id,
+        },
+      },
     },
   });
-  
+
   return NextResponse.json("Successful!");
 }

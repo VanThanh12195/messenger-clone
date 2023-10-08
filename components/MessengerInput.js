@@ -12,7 +12,11 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
 
-export default function MessengerInput({ currentUserID, conversationID }) {
+export default function MessengerInput({
+  currentUserID,
+  conversationID,
+  currentUserEmail,
+}) {
   const [message, setMessage] = useState("");
 
   const handleInputChange = (event) => {
@@ -21,10 +25,13 @@ export default function MessengerInput({ currentUserID, conversationID }) {
 
   function sendMessage() {
     if (message) {
-      toast.success(message);
-
       axios
-        .post("/api/chat/message", { message, currentUserID, conversationID })
+        .post("/api/chat/message", {
+          message,
+          currentUserID,
+          conversationID,
+          currentUserEmail,
+        })
         .then(function (response) {
           if (response.status === 200) toast.success(response.data);
         })

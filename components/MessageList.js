@@ -1,16 +1,36 @@
-import getAllMessages from "@/utils/getAllMessages";
+"use client";
+
 import IncomingMessage from "./IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage";
+import { pusherClient } from "@/utils/getPusherClient";
+import { useState, useEffect } from "react";
 
-export default async function MessageList({ currentUserID,conversationID }) {
+export default function MessageList({
+  currentUserID,
+  conversationID,
+  initialMessages,
+}) {
+  const [messages, setMessages] = useState(initialMessages);
 
-  const messages = await getAllMessages(conversationID);
+  useEffect(() => {
+
+    const channel = pusherClient.subscribe(conversationID);
+
+    channel.bind("messages:new", (data) => {
+      setMessages((prevMessages) => [...prevMessages, data]);
+    });
+
+    return () => {
+      channel.unbind("messages:new");
+      pusherClient.unsubscribe(conversationID);
+    };
+  }, [conversationID]);
 
   const messageList = messages.map((message) => {
     if (message.senderId === currentUserID)
-      return <OutgoingMessage message={message} />;
-    return <IncomingMessage message={message} />;
+      return <OutgoingMessage message={message} key={message.id} />;
+    return <IncomingMessage message={message} key={message.id} />;
   });
 
-  return messageList;
+  return <div>{messageList}</div>;
 }

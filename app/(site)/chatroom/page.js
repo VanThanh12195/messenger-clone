@@ -5,9 +5,6 @@ export default async function page() {
 
 
   return (
-    <>
       <ChatRoom />
-      <ButtonSignOut/>
-    </>
   );
 }
