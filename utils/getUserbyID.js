@@ -1,9 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from "./getPrismaClient";
 
 export default async function getUserbyID(id ) {
-  const prisma = new PrismaClient();
-
-console.log('id is ' + id);
 
   const userFound = await prisma.user.findUnique({
     where: {

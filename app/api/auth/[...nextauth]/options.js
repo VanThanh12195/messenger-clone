@@ -2,7 +2,7 @@ import FacebookProvider from "next-auth/providers/facebook";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/utils/getPrismaClient";
 
 export const options = {
   providers: [
@@ -21,8 +21,6 @@ export const options = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-
-        const prisma = new PrismaClient();
 
         const { email, password } = credentials;
 

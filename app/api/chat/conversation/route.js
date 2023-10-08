@@ -1,13 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/utils/getPrismaClient";
+
 import getCurrentUser from "@/utils/getCurrentUser";
 
 
 export async function POST(request) {
   const { id } = await getCurrentUser();
-
-  const prisma = new PrismaClient();
 
   const { email } = await request.json();
 

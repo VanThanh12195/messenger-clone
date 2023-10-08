@@ -1,8 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import getCurrentUser from "./getCurrentUser";
+import prisma from "./getPrismaClient";
 
 export default async function getAllConversation() {
-  const prisma = new PrismaClient();
 
   const { id } = await getCurrentUser();
 
@@ -14,12 +13,15 @@ export default async function getAllConversation() {
     },
     select: {
       id: true,
-      isGroup:true,
+      isGroup: true,
       userIds: true,
-      lastMessage:true,
+      lastMessage: true,
       lastMessageAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 
-  return conversations
+  return conversations;
 }

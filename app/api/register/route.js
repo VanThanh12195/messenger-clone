@@ -1,11 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { PrismaClient } from "@prisma/client";
-
+import prisma from "@/utils/getPrismaClient";
 import getRandomUserImageUrl from "@/utils/getRandomUserImageUrl";
 
 export async function POST(request) {
-  const prisma = new PrismaClient();
 
   const user = await request.json();
 

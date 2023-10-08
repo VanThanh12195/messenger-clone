@@ -29,7 +29,7 @@ export default function MessageModal() {
       axios
         .post("/api/chat/conversation", { email })
         .then(function (response) {
-          if (response.status === 200) router.push(`/chatroom/${response.data}`)
+          if (response.status === 200) router.refresh()
           setIsOpen(false);
         })
         .catch(function (error) {

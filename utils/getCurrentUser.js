@@ -1,11 +1,10 @@
-import { PrismaClient } from "@prisma/client";
 import getServerSideSession from "./getServerSideSession"
+
+import prisma from "./getPrismaClient";
 
 export default async function getCurrentUser() {
 
     const session = await getServerSideSession()
-
-    const prisma = new PrismaClient();
 
     const user = await prisma.user.findUnique({
         where: {

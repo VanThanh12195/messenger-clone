@@ -5,7 +5,7 @@ import ChatHeader from "@/components/ChatHeader";
 import MessageList from "@/components/MessageList";
 import MessengerInput from "@/components/MessengerInput";
 
-export default function ConversationChat({params}) {
+export default function ConversationChat() {
 
     return (
         <>

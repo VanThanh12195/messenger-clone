@@ -10,14 +10,10 @@ export default async function ConversationList() {
 
   if (!conversations) return <div>No conversations!</div>;
 
-  const userIDGuest = conversations.map((conversation) =>
-    conversation.userIds.filter((userId) => userId !== id)
-  );
-
   const conversationsList = conversations.map((conversation)=>{
 
     if(conversation.lastMessage) return <Conversation id={ conversation.userIds.filter((userId) => userId !== id)} lastMessage = {conversation.lastMessage}/>
-    return <ConversationNew id={ conversation.userIds.filter((userId) => userId !== id)}/>
+    return <ConversationNew conversation={conversation}/>
   })
 
   return conversationsList
