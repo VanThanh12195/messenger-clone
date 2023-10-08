@@ -10,18 +10,30 @@ import { MdKeyboardVoice } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
-export default function MessengerInput() {
-  const [inputValue, setInputValue] = useState("");
+export default function MessengerInput({ currentUserID, conversationID }) {
+  const [message, setMessage] = useState("");
 
   const handleInputChange = (event) => {
-    setInputValue(event.target.value);
+    setMessage(event.target.value);
   };
 
   function sendMessage() {
-    if (inputValue) {
-      toast.success(inputValue);
-      setInputValue("");
+    if (message) {
+      toast.success(message);
+
+      axios
+        .post("/api/chat/message", { message, currentUserID, conversationID })
+        .then(function (response) {
+          if (response.status === 200) toast.success(response.data);
+        })
+        .catch(function (error) {
+          if (error.response.status === 409) toast.error(error.response.data);
+        })
+        .finally(function () {
+          setMessage("");
+        });
     }
   }
 
@@ -39,7 +51,7 @@ export default function MessengerInput() {
           <input
             className="rounded-full py-2 pl-3 pr-10 w-full border focus:border-gray-300 bg-gray-200 focus:bg-gray-300 focus:outline-none text-black focus:shadow-md transition duration-300 ease-in"
             type="text"
-            value={inputValue}
+            value={message}
             onChange={handleInputChange}
             defaultValue=""
             placeholder="Aa"

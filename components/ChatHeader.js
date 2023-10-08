@@ -1,19 +1,8 @@
 import { HiMiniPhone } from "react-icons/hi2";
 import { BiSolidVideoPlus } from "react-icons/bi";
 import { FaInfoCircle } from "react-icons/fa";
-import getConversationbyID from "@/utils/getConversationbyID";
-import getCurrentUser from "@/utils/getCurrentUser";
-import getUserbyID from "@/utils/getUserbyID";
 
-export default async function ChatHeader({ params }) {
-
-const conversation = await getConversationbyID(params.conversationID);
-  
-const { id } = await getCurrentUser();
-
-const userIdGuest = conversation.userIds.filter((userId) => userId !== id);
-
-const userGuest = await getUserbyID(userIdGuest[0]);
+export default async function ChatHeader({ userGuest }) {
 
   return (
     <div className="px-6 py-4 flex flex-row flex-none justify-between items-center shadow">
