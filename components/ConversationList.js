@@ -1,10 +1,8 @@
 import getAllConversation from "@/utils/getAllConversation";
 import Conversation from "./Conversation";
 import ConversationNew from "./ConversationNew";
-import getCurrentUser from "@/utils/getCurrentUser";
 
 export default async function ConversationList() {
-  const { id } = await getCurrentUser();
 
   const conversations = await getAllConversation();
 
@@ -12,7 +10,7 @@ export default async function ConversationList() {
 
   const conversationsList = conversations.map((conversation)=>{
 
-    if(conversation.lastMessage) return <Conversation id={ conversation.userIds.filter((userId) => userId !== id)} lastMessage = {conversation.lastMessage}/>
+    if(conversation.lastMessage) return <Conversation conversation={conversation}/>
     return <ConversationNew conversation={conversation}/>
   })
 
