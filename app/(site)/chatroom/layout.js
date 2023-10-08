@@ -3,7 +3,7 @@ import ConversationList from "@/components/ConversationList";
 import ConversationSearchBar from "@/components/ConversationSearchBar";
 
 
-export default async function ChatRoomLayout({ children }) {
+export default function ChatRoomLayout({ children }) {
 
   return (
    <>
