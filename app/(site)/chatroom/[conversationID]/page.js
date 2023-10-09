@@ -7,7 +7,7 @@ import getCurrentUser from "@/utils/getCurrentUser";
 import getUserbyID from "@/utils/getUserbyID";
 
 export default async function ConversationChat({ params }) {
-  
+
   const initialMessages = await getAllMessages(params.conversationID);
 
   const conversation = await getConversationbyID(params.conversationID);
@@ -21,7 +21,7 @@ export default async function ConversationChat({ params }) {
   return (
     <section className="flex flex-col flex-auto border-l border-gray-800">
       <ChatHeader userGuest={userGuest} />
-      <div className="p-4 flex-1">
+      <div className="p-4 flex-1 overflow-y-auto">
         <MessageList
           initialMessages={initialMessages}
           currentUserID={id}

@@ -2,7 +2,7 @@
 
 import IncomingMessage from "./IncomingMessage";
 import OutgoingMessage from "./OutgoingMessage";
-import { pusherClient } from "@/utils/getPusherClient";
+import { pusherClient } from "@/utils/pusher";
 import { useState, useEffect, useRef } from "react";
 
 export default function MessageList({
@@ -10,18 +10,20 @@ export default function MessageList({
   conversationID,
   initialMessages,
 }) {
-  const [messages, setMessages] = useState(initialMessages);
+  const messageListRef = useRef(null);
 
-  const bottomRef = useRef ()
+  const [messages, setMessages] = useState([]);
+
   useEffect(() => {
+    messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
+
     pusherClient.subscribe(conversationID);
 
-    bottomRef?.current?.scrollIntoView();
-
     pusherClient.bind("messages:new", (data) => {
-      bottomRef?.current?.scrollIntoView();
 
       setMessages((prevMessages) => [...prevMessages, data]);
+
+      messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
     });
 
     return () => {
@@ -29,6 +31,12 @@ export default function MessageList({
       pusherClient.unsubscribe(conversationID);
     };
   }, [conversationID]);
+
+  const initialMessageList = initialMessages.map((message) => {
+    if (message.senderId === currentUserID)
+      return <OutgoingMessage message={message} key={message.id} />;
+    return <IncomingMessage message={message} key={message.id} />;
+  });
 
   const messageList = messages.map((message) => {
     if (message.senderId === currentUserID)
@@ -38,7 +46,9 @@ export default function MessageList({
 
   return (
     <div>
-      {messageList} <div ref={bottomRef} />
+      {initialMessageList}
+      {messageList}
+      <div ref={messageListRef} />
     </div>
   );
 }

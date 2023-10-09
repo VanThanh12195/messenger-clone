@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 import prisma from "@/utils/getPrismaClient";
-import { pusherServer } from "@/utils/getPusherServer";
+import { pusherServer } from "@/utils/pusher";
 
 export async function POST(request) {
   const { message, currentUserID, conversationID, currentUserEmail } =
@@ -23,7 +23,7 @@ export async function POST(request) {
     },
   });
 
-  const result = pusherServer.trigger(
+  await pusherServer.trigger(
     conversationID,
     "messages:new",
     newMessage
