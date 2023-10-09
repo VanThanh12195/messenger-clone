@@ -19,15 +19,15 @@ export default function MessageList({
 
     pusherClient.subscribe(conversationID);
 
-    pusherClient.bind("messages:new", (data) => {
-
+    function messageHandler(data) {
       setMessages((prevMessages) => [...prevMessages, data]);
-
       messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
-    });
+    }
+
+    pusherClient.bind("messages:new", messageHandler);
 
     return () => {
-      pusherClient.unbind("messages:new");
+      pusherClient.unbind("messages:new", messageHandler);
       pusherClient.unsubscribe(conversationID);
     };
   }, [conversationID]);
