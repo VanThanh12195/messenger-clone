@@ -1,22 +1,34 @@
-import getCurrentUser from "./getCurrentUser";
 import prisma from "./getPrismaClient";
+import getServerSideSession from "./getServerSideSession";
 
 export default async function getAllConversation() {
+  const session = await getServerSideSession();
 
-  const { id } = await getCurrentUser();
+  const currentUserId = session.user.id;
 
   const conversations = await prisma.conversation.findMany({
     where: {
       userIds: {
-        has: id,
+        has: currentUserId,
       },
     },
     select: {
       id: true,
       isGroup: true,
-      userIds: true,
       lastMessage: true,
       lastMessageAt: true,
+      users: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+        where: {
+          id: {
+            not: currentUserId,
+          },
+        },
+      },
     },
     orderBy: {
       createdAt: "desc",

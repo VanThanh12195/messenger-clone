@@ -1,14 +1,27 @@
-
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client";
 
 const getPrismaClient = () => {
-  return new PrismaClient()
-}
 
-const globalForPrisma = globalThis
+const prisma = new PrismaClient({
+    log: [
+      {
+        emit: "event",
+        level: "query",
+      },
+    ],
+  });
 
-const prisma = globalForPrisma.prisma ?? getPrismaClient()
+prisma.$on('query', (e) => {
+  console.log('Query: ' + e.query)
+})
 
-export default prisma
+  return prisma
+};
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+const globalForPrisma = globalThis;
+
+const prisma = globalForPrisma.prisma ?? getPrismaClient();
+
+export default prisma;
+
+if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;

@@ -6,8 +6,8 @@ import { pusherClient } from "@/utils/pusher";
 import { useState, useEffect, useRef } from "react";
 
 export default function MessageList({
-  currentUserID,
-  conversationID,
+  currentUserId,
+  conversationId,
   initialMessages,
 }) {
   const messageListRef = useRef(null);
@@ -17,7 +17,7 @@ export default function MessageList({
   useEffect(() => {
     messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
 
-    pusherClient.subscribe(conversationID);
+    pusherClient.subscribe(conversationId);
 
     function messageHandler(data) {
       setMessages((prevMessages) => [...prevMessages, data]);
@@ -28,18 +28,18 @@ export default function MessageList({
 
     return () => {
       pusherClient.unbind("messages:new", messageHandler);
-      pusherClient.unsubscribe(conversationID);
+      pusherClient.unsubscribe(conversationId);
     };
-  }, [conversationID]);
+  }, [conversationId]);
 
   const initialMessageList = initialMessages.map((message) => {
-    if (message.senderId === currentUserID)
+    if (message.sender.id === currentUserId)
       return <OutgoingMessage message={message} key={message.id} />;
     return <IncomingMessage message={message} key={message.id} />;
   });
 
   const messageList = messages.map((message) => {
-    if (message.senderId === currentUserID)
+    if (message.sender.id === currentUserId)
       return <OutgoingMessage message={message} key={message.id} />;
     return <IncomingMessage message={message} key={message.id} />;
   });

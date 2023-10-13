@@ -2,36 +2,28 @@ import ChatHeader from "@/components/ChatHeader";
 import MessageList from "@/components/MessageList";
 import MessengerInput from "@/components/MessengerInput";
 import getAllMessages from "@/utils/getAllMessages";
-import getConversationbyID from "@/utils/getConversationbyID";
-import getCurrentUser from "@/utils/getCurrentUser";
-import getUserbyID from "@/utils/getUserbyID";
+import getServerSideSession from "@/utils/getServerSideSession";
 
 export default async function ConversationChat({ params }) {
 
-  const initialMessages = await getAllMessages(params.conversationID);
+  const session = await getServerSideSession();
 
-  const conversation = await getConversationbyID(params.conversationID);
-
-  const { id, email } = await getCurrentUser();
-
-  const userIdGuest = conversation.userIds.filter((userId) => userId !== id);
-
-  const userGuest = await getUserbyID(userIdGuest[0]);
+  const allMessages = await getAllMessages(params.conversationId);
 
   return (
     <section className="flex flex-col flex-auto border-l border-gray-800">
-      <ChatHeader userGuest={userGuest} />
+      <ChatHeader userGuest={allMessages.users[0]} />
       <div className="p-4 flex-1 overflow-y-auto">
         <MessageList
-          initialMessages={initialMessages}
-          currentUserID={id}
-          conversationID={params.conversationID}
+          initialMessages={allMessages.messages}
+          currentUserId={session.user.id}
+          conversationId={params.conversationId}
         />
       </div>
       <MessengerInput
-        currentUserID={id}
-        currentUserEmail={email}
-        conversationID={params.conversationID}
+        currentUserId={session.user.id}
+        currentUserImage={session.user.image}
+        conversationId={params.conversationId}
       />
     </section>
   );

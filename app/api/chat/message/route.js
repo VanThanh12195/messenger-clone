@@ -4,34 +4,37 @@ import prisma from "@/utils/getPrismaClient";
 import { pusherServer } from "@/utils/pusher";
 
 export async function POST(request) {
-  const { message, currentUserID, conversationID, currentUserEmail } =
+  const { message, currentUserId, conversationId, currentUserImage } =
     await request.json();
+
+  await pusherServer.trigger(conversationId, "messages:new", {
+    body: message,
+    image: null,
+    sender: {
+      id: currentUserId,
+      image: currentUserImage,
+    },
+  });
 
   const newMessage = await prisma.message.create({
     data: {
       body: message,
       conversation: {
         connect: {
-          id: conversationID,
+          id: conversationId,
         },
       },
       sender: {
         connect: {
-          id: currentUserID,
+          id: currentUserId,
         },
       },
     },
   });
 
-  await pusherServer.trigger(
-    conversationID,
-    "messages:new",
-    newMessage
-  );
-
   const conversationUpdated = await prisma.conversation.update({
     where: {
-      id: conversationID,
+      id: conversationId,
     },
     data: {
       lastMessage: message,

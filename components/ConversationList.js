@@ -1,6 +1,5 @@
 import getAllConversation from "@/utils/getAllConversation";
-import Conversation from "./Conversation";
-import ConversationNew from "./ConversationNew";
+import ConversationItem from "./ConversationItem";
 
 export default async function ConversationList() {
 
@@ -8,11 +7,9 @@ export default async function ConversationList() {
 
   if (!conversations) return <div>No conversations!</div>;
 
-  const conversationsList = conversations.map((conversation)=>{
+  const conversationsList = conversations.map((conversation) => {
+    return <ConversationItem conversation={conversation} />;
+  });
 
-    if(conversation.lastMessage) return <Conversation conversation={conversation}/>
-    return <ConversationNew conversation={conversation}/>
-  })
-
-  return conversationsList
+  return conversationsList;
 }

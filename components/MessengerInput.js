@@ -13,9 +13,9 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function MessengerInput({
-  currentUserID,
-  conversationID,
-  currentUserEmail,
+  currentUserId,
+  conversationId,
+  currentUserImage,
 }) {
   const [message, setMessage] = useState("");
 
@@ -28,9 +28,9 @@ export default function MessengerInput({
       axios
         .post("/api/chat/message", {
           message,
-          currentUserID,
-          conversationID,
-          currentUserEmail,
+          currentUserId,
+          conversationId,
+          currentUserImage,
         })
         .then(function (response) {
           if (response.status === 200) toast.success(response.data);
