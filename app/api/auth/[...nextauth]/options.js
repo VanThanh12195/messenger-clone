@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
 import prisma from "@/utils/getPrismaClient";
+import { useMemo } from "react";
 
 export const options = {
   providers: [
@@ -21,7 +22,6 @@ export const options = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-
         const { email, password } = credentials;
 
         let bcrypt = require("bcryptjs");
@@ -32,6 +32,8 @@ export const options = {
           },
         });
 
+        console.log(userFoundbyEmail);
+
         if (!userFoundbyEmail) return null;
 
         const isValidPassword = bcrypt.compareSync(
@@ -41,7 +43,12 @@ export const options = {
 
         if (!isValidPassword) return null;
 
-        return { ...credentials, name: userFoundbyEmail.name, image: userFoundbyEmail.image };
+        return {
+          ...credentials,
+          name: userFoundbyEmail.name,
+          image: userFoundbyEmail.image,
+          id: userFoundbyEmail.id,
+        };
       },
     }),
   ],
@@ -60,11 +67,10 @@ export const options = {
       return token;
     },
     async session({ session, token }) {
+        
       return {
-        ...session,
         user: {
-
-          accessToken : token.accessToken,
+          accessToken: token.accessToken,
           ...session.user,
           id: token.id,
           randomKey: token.randomKey,

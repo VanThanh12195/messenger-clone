@@ -3,25 +3,14 @@
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { IoMdClose } from "react-icons/io";
-import { MdOutlineOpenInNew } from "react-icons/md";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
-export default function MessageModal() {
-  let [isOpen, setIsOpen] = useState(false);
+export default function MessageModal({ isOpen, closeModal }) {
   const [email, setEmail] = useState("");
 
   const router = useRouter();
-
-  function closeModal() {
-    setIsOpen(false);
-  }
-
-  function openModal() {
-    setIsOpen(true);
-    setEmail("");
-  }
 
   function sendMessage() {
     if (email === "") toast.error("Please input email!");
@@ -29,13 +18,13 @@ export default function MessageModal() {
       axios
         .post("/api/chat/conversation", { email })
         .then(function (response) {
-          if (response.status === 200) router.refresh()
-          setIsOpen(false);
+          if (response.status === 200) router.refresh();
         })
         .catch(function (error) {
           if (error.response.status === 404) toast.error(error.response.data);
         })
         .finally(function () {
+          closeModal();
           setEmail("");
         });
     }
@@ -47,13 +36,6 @@ export default function MessageModal() {
 
   return (
     <>
-      <div
-        className=" bg-gray-200 p-2 rounded-full hover:bg-gray-300 hover:cursor-pointer transition duration-300"
-        onClick={openModal}
-      >
-        <MdOutlineOpenInNew size={20} />
-      </div>
-
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
           <Transition.Child

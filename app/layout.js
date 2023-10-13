@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <AuthProvider>
-          <Toaster />
+          <Toaster toastOptions={{ duration: 1000 }} />
           {children}
         </AuthProvider>
       </body>
