@@ -2,18 +2,20 @@ import { PrismaClient } from "@prisma/client";
 
 const getPrismaClient = () => {
 
-const prisma = new PrismaClient({
-    log: [
-      {
-        emit: "event",
-        level: "query",
-      },
-    ],
-  });
+const prisma = new PrismaClient(
+  // {
+  //   log: [
+  //     {
+  //       emit: "event",
+  //       level: "query",
+  //     },
+  //   ],
+  // }
+  );
 
-prisma.$on('query', (e) => {
-  console.log('Query: ' + e.query)
-})
+// prisma.$on('query', (e) => {
+//   console.log('Query: ' + e.query)
+// })
 
   return prisma
 };

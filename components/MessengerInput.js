@@ -25,6 +25,7 @@ export default function MessengerInput({
 
   function sendMessage() {
     if (message) {
+      setMessage("");
       axios
         .post("/api/chat/message", {
           message,
@@ -39,7 +40,7 @@ export default function MessengerInput({
           if (error.response.status === 409) toast.error(error.response.data);
         })
         .finally(function () {
-          setMessage("");
+          
         });
     }
   }

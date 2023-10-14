@@ -1,9 +1,8 @@
 "use client";
 
-import IncomingMessage from "./IncomingMessage";
-import OutgoingMessage from "./OutgoingMessage";
+import MessageItem from "./MessageItem";
 import { pusherClient } from "@/utils/pusher";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 
 export default function MessageList({
   currentUserId,
@@ -32,16 +31,25 @@ export default function MessageList({
     };
   }, [conversationId]);
 
-  const initialMessageList = initialMessages.map((message) => {
-    if (message.sender.id === currentUserId)
-      return <OutgoingMessage message={message} key={message.id} />;
-    return <IncomingMessage message={message} key={message.id} />;
-  });
+  const initialMessageList = useMemo(() => {
+    console.log('i am here');
+    return initialMessages.map((message) => (
+      <MessageItem
+        message={message}
+        key={message.id}
+        currentUserId={currentUserId}
+      />
+    ));
+  }, [initialMessages, currentUserId]);
 
   const messageList = messages.map((message) => {
-    if (message.sender.id === currentUserId)
-      return <OutgoingMessage message={message} key={message.id} />;
-    return <IncomingMessage message={message} key={message.id} />;
+    return (
+      <MessageItem
+        message={message}
+        key={message.id}
+        currentUserId={currentUserId}
+      />
+    );
   });
 
   return (

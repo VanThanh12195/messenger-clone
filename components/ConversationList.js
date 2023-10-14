@@ -8,7 +8,7 @@ export default async function ConversationList() {
   if (!conversations) return <div>No conversations!</div>;
 
   const conversationsList = conversations.map((conversation) => {
-    return <ConversationItem conversation={conversation} />;
+    return <ConversationItem conversation={conversation} key={conversation.id} />;
   });
 
   return conversationsList;
