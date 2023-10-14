@@ -9,12 +9,14 @@ import axios from "axios";
 
 export default function MessageModal({ isOpen, closeModal }) {
   const [email, setEmail] = useState("");
+  const [active, setActive] = useState(false);
 
   const router = useRouter();
 
   function sendMessage() {
     if (email === "") toast.error("Please input email!");
     else {
+      setActive(true);
       axios
         .post("/api/chat/conversation", { email })
         .then(function (response) {
@@ -27,8 +29,8 @@ export default function MessageModal({ isOpen, closeModal }) {
           if (error.response.status === 404) toast.error(error.response.data);
         })
         .finally(function () {
-          closeModal();
           setEmail("");
+          setActive(false);
         });
     }
   }
@@ -86,6 +88,7 @@ export default function MessageModal({ isOpen, closeModal }) {
                       <input
                         type="email"
                         value={email}
+                        disabled={active}
                         onChange={handleEmailChange}
                         id="input-label"
                         className="py-3 px-4 block w-full border-2 border-gray-200 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-slate-900 dark:border-gray-700 dark:text-gray-400"
@@ -104,6 +107,7 @@ export default function MessageModal({ isOpen, closeModal }) {
                       <button
                         className="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
                         onClick={sendMessage}
+                        disabled={active}
                       >
                         Send
                       </button>

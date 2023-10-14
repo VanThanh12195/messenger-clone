@@ -58,6 +58,7 @@ export default function MessengerInput({
             className="rounded-full py-2 pl-3 pr-10 w-full border focus:border-gray-300 bg-gray-200 focus:bg-gray-300 focus:outline-none text-black focus:shadow-md transition duration-300 ease-in"
             type="text"
             value={message}
+            autoFocus={true}
             onChange={handleInputChange}
             placeholder="Aa"
             onKeyDown={(e) => {
