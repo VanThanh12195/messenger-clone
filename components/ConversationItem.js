@@ -4,7 +4,6 @@ import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import Link from "next/link";
 
 export default function ConversationItem({ conversation }) {
-
   return (
     <Link href={`/chatroom/${conversation.id}`}>
       <div className="flex justify-between items-center p-3 hover:bg-gray-100 rounded-lg relative w-80 hover:cursor-pointer">

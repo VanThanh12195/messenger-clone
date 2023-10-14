@@ -34,10 +34,16 @@ export default function ConversationList({
       ]);
     }
 
+    function newConversation(data) {
+      setConversations([data, ...conversations]);
+    }
+
     pusherClient.bind("conversation:update", updateConversation);
+    pusherClient.bind("conversation:new", newConversation);
 
     return () => {
       pusherClient.unbind("conversation:update", updateConversation);
+      pusherClient.unbind("conversation:new", newConversation);
       pusherClient.unsubscribe(currentUserEmail);
     };
   }, [conversations]);

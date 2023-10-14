@@ -1,5 +1,4 @@
 export default function MessageItem({ message, currentUserId }) {
-
   if (message.sender.id === currentUserId)
     return (
       <div className="flex flex-row justify-end mt-1">
