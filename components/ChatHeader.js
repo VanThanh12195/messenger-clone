@@ -10,12 +10,12 @@ export default function ChatHeader({ userGuest }) {
         <div className="w-12 h-12 mr-4 relative flex flex-shrink-0">
           <img
             className="shadow-md rounded-full w-full h-full object-cover"
-            src={userGuest.image}
+            src={userGuest[0].image}
             alt=""
           />
         </div>
         <div className="text-sm">
-          <p className="font-bold">{userGuest.name}</p>
+          <p className="font-bold">{userGuest[0].name}</p>
           <p>Active 1h ago</p>
         </div>
       </div>

@@ -22,6 +22,7 @@ export default async function getAllConversation() {
           id: true,
           name: true,
           image: true,
+          email:true
         },
         where: {
           id: {

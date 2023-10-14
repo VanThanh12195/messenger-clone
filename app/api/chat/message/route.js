@@ -4,8 +4,22 @@ import prisma from "@/utils/getPrismaClient";
 import { pusherServer } from "@/utils/pusher";
 
 export async function POST(request) {
-  const { message, currentUserId, conversationId, currentUserImage } =
-    await request.json();
+  const { message, conversationId, users } = await request.json();
+
+  const currentUser = users[users.length - 1];
+
+  const currentUserId = currentUser.id;
+  const currentUserImage = currentUser.image;
+
+  // users.map(async (user) => {
+  await pusherServer.trigger(conversationId, "conversation:updated", {
+    body: message,
+    image: null,
+    conversationId:conversationId,
+    document: null,
+    createdAt: new Date(),
+  });
+  // });
 
   await pusherServer.trigger(conversationId, "messages:new", {
     body: message,

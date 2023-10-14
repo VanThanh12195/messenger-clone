@@ -9,16 +9,18 @@ export const formatRelativeTime = (date) => {
 
   if (parts && parts.length === 3) {
     const numericValue = parseInt(parts[1]);
-    const timeUnit = parts[2][0];
+    const timeUnit = parts[2];
 
-    if (timeUnit === "s" && numericValue < 59) return "1m";
+    if (timeUnit.includes("month")) return `${numericValue}mo`;
 
-    if (timeUnit === "d" && numericValue > 6)
+    if (timeUnit.includes("second") && numericValue < 59) return "1m";
+
+    if (timeUnit.includes("day") && numericValue > 6)
       return `${parseInt(numericValue / 7)}w`;
 
-    if (timeUnit === "w" && numericValue > 51)
+    if (timeUnit.includes("week") && numericValue > 51)
       return `${parseInt(numericValue / 52)}y`;
 
-    return `${numericValue}${timeUnit}`;
+    return `${numericValue}${timeUnit[0]}`;
   }
 };

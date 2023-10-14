@@ -5,14 +5,13 @@ import getAllMessages from "@/utils/getAllMessages";
 import getServerSideSession from "@/utils/getServerSideSession";
 
 export default async function ConversationChat({ params }) {
-
   const session = await getServerSideSession();
 
   const allMessages = await getAllMessages(params.conversationId);
-
+  
   return (
     <section className="flex flex-col flex-auto border-l border-gray-800">
-      <ChatHeader userGuest={allMessages.users[0]} />
+      <ChatHeader userGuest={allMessages.users} />
       <div className="p-4 flex-1 overflow-y-auto">
         <MessageList
           initialMessages={allMessages.messages}
@@ -21,8 +20,7 @@ export default async function ConversationChat({ params }) {
         />
       </div>
       <MessengerInput
-        currentUserId={session.user.id}
-        currentUserImage={session.user.image}
+        users={[...allMessages.users, session.user]}
         conversationId={params.conversationId}
       />
     </section>

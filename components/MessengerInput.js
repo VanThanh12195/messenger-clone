@@ -13,9 +13,8 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 export default function MessengerInput({
-  currentUserId,
   conversationId,
-  currentUserImage,
+  users
 }) {
   const [message, setMessage] = useState("");
 
@@ -29,9 +28,8 @@ export default function MessengerInput({
       axios
         .post("/api/chat/message", {
           message,
-          currentUserId,
+          users,
           conversationId,
-          currentUserImage,
         })
         .then(function (response) {
           if (response.status === 200) toast.success(response.data);
@@ -61,7 +59,6 @@ export default function MessengerInput({
             type="text"
             value={message}
             onChange={handleInputChange}
-            defaultValue=""
             placeholder="Aa"
             onKeyDown={(e) => {
               if (e.key === "Enter") {

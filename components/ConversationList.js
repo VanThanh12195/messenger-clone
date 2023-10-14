@@ -1,13 +1,11 @@
 import getAllConversation from "@/utils/getAllConversation";
 import ConversationItem from "./ConversationItem";
-import { formatRelativeTime } from "@/utils/formatRelativeTime";
-
+import getServerSideSession from "@/utils/getServerSideSession";
 
 export default async function ConversationList() {
+  const session = await getServerSideSession();
 
-  const distance = formatRelativeTime(new Date("2023-10-01T10:24:35.169+00:00"))
-
-  console.log(distance);
+  const currentUserEmail = session.user.email;
 
   const conversations = await getAllConversation();
 
@@ -15,7 +13,11 @@ export default async function ConversationList() {
 
   const conversationsList = conversations.map((conversation) => {
     return (
-      <ConversationItem conversation={conversation} key={conversation.id} />
+      <ConversationItem
+        conversation={conversation}
+        key={conversation.id}
+        currentUserEmail={currentUserEmail}
+      />
     );
   });
 
