@@ -32,7 +32,6 @@ export default function MessageList({
   }, [conversationId]);
 
   const initialMessageList = useMemo(() => {
-    console.log('i am here');
     return initialMessages.map((message) => (
       <MessageItem
         message={message}

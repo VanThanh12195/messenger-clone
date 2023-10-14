@@ -18,7 +18,7 @@ export default function MessageModal({ isOpen, closeModal }) {
       axios
         .post("/api/chat/conversation", { email })
         .then(function (response) {
-          if (response.status === 200) router.refresh();
+          if (response.status === 200) router.push(`/chatroom/${response.data}`);
         })
         .catch(function (error) {
           if (error.response.status === 404) toast.error(error.response.data);

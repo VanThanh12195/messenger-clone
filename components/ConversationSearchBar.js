@@ -3,7 +3,7 @@ import { GrSearch } from "react-icons/gr";
 export default function ConversationSearchBar() {
   return (
     <div className="p-4">
-      <form onsubmit="">
+      <form onSubmit="">
         <div className="relative">
           <label>
             <input
