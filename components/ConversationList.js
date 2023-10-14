@@ -1,23 +1,50 @@
-import getAllConversation from "@/utils/getAllConversation";
+"use client";
+
+import { useEffect, useState } from "react";
 import ConversationItem from "./ConversationItem";
-import getServerSideSession from "@/utils/getServerSideSession";
+import { pusherClient } from "@/utils/pusher";
 
-export default async function ConversationList() {
-  const session = await getServerSideSession();
-
-  const currentUserEmail = session.user.email;
-
-  const conversations = await getAllConversation();
+export default function ConversationList({
+  initialConversations,
+  currentUserEmail,
+}) {
+  const [conversations, setConversations] = useState(initialConversations);
 
   if (!conversations) return <div>No conversations!</div>;
 
+  useEffect(() => {
+    pusherClient.subscribe(currentUserEmail);
+
+    function updateConversation(data) {
+      let modifiedConversation = "";
+
+      for (let i = 0; i < conversations.length; i++) {
+        if (conversations[i].id === data.conversationId) {
+          modifiedConversation = conversations.splice(i, 1)[0];
+          break;
+        }
+      }
+      setConversations([
+        {
+          ...modifiedConversation,
+          lastMessage: data.body,
+          lastMessageAt: data.createdAt,
+        },
+        ...conversations,
+      ]);
+    }
+
+    pusherClient.bind("conversation:update", updateConversation);
+
+    return () => {
+      pusherClient.unbind("conversation:update", updateConversation);
+      pusherClient.unsubscribe(currentUserEmail);
+    };
+  }, [conversations]);
+
   const conversationsList = conversations.map((conversation) => {
     return (
-      <ConversationItem
-        conversation={conversation}
-        key={conversation.id}
-        currentUserEmail={currentUserEmail}
-      />
+      <ConversationItem conversation={conversation} key={conversation.id} />
     );
   });
 

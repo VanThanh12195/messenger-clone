@@ -11,16 +11,6 @@ export async function POST(request) {
   const currentUserId = currentUser.id;
   const currentUserImage = currentUser.image;
 
-  // users.map(async (user) => {
-  await pusherServer.trigger(conversationId, "conversation:updated", {
-    body: message,
-    image: null,
-    conversationId:conversationId,
-    document: null,
-    createdAt: new Date(),
-  });
-  // });
-
   await pusherServer.trigger(conversationId, "messages:new", {
     body: message,
     image: null,
@@ -28,6 +18,16 @@ export async function POST(request) {
       id: currentUserId,
       image: currentUserImage,
     },
+  });
+
+  users.map(async (user) => {
+    await pusherServer.trigger(user.email, "conversation:update", {
+      body: message,
+      image: null,
+      conversationId: conversationId,
+      document: null,
+      createdAt: new Date(),
+    });
   });
 
   const newMessage = await prisma.message.create({

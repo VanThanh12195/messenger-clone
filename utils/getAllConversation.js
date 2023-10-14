@@ -32,7 +32,7 @@ export default async function getAllConversation() {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      lastMessageAt: "desc",
     },
   });
 

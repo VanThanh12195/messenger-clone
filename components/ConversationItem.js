@@ -2,30 +2,8 @@
 
 import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import Link from "next/link";
-import { pusherClient } from "@/utils/pusher";
-import { useEffect, useState } from "react";
 
-export default function ConversationItem({ conversation, currentUserEmail }) {
-  const [message, setMessage] = useState({
-    body: conversation.lastMessage,
-    timeStamp: conversation.lastMessageAt,
-  });
-
-  useEffect(() => {
-    pusherClient.subscribe(conversation.id);
-
-    function messageHandler(data) {
-      if (data.conversationId === conversation.id)
-        setMessage({ body: data.body, timeStamp: data.createdAt });
-    }
-
-    pusherClient.bind("conversation:updated", messageHandler);
-
-    return () => {
-      pusherClient.unbind("conversation:updated", messageHandler);
-      pusherClient.unsubscribe(conversation.id);
-    };
-  }, [conversation.id]);
+export default function ConversationItem({ conversation }) {
 
   return (
     <Link href={`/chatroom/${conversation.id}`}>
@@ -46,14 +24,14 @@ export default function ConversationItem({ conversation, currentUserEmail }) {
           </p>
           <div className="flex flex-row items-center text-base text-gray-600">
             <p className="truncate">
-              {message.body ? (
-                message.body
+            {conversation.lastMessage ? (
+                conversation.lastMessage
               ) : (
                 <strong>Start a new conversation.</strong>
               )}
             </p>
             <p className="w-20 ml-2">
-              &#8226; {formatRelativeTime(new Date(message.timeStamp))}
+              &#8226; {formatRelativeTime(new Date(conversation.lastMessageAt))}
             </p>
           </div>
         </div>
