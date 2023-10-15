@@ -1,5 +1,6 @@
 "use client";
 
+import { removeFromState, usePersistedState } from "@/hooks/usePersistedState";
 import MessageItem from "./MessageItem";
 import { pusherClient } from "@/utils/pusher";
 import { useState, useEffect, useRef, useMemo } from "react";
@@ -11,8 +12,18 @@ export default function MessageList({
 }) {
   const messageListRef = useRef(null);
 
-  const [messages, setMessages] = useState([]);
+  const [messagesLength, setMessagesLength] = usePersistedState(
+    conversationId + "length",
+    0
+  );
 
+  if (messagesLength != initialMessages.length) {
+    setMessagesLength(initialMessages.length);
+    removeFromState(conversationId);
+  }
+  const [messages, setMessages] = usePersistedState(conversationId, []);
+
+  console.log(messages);
   useEffect(() => {
     messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
 
