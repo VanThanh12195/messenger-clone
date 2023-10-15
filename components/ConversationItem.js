@@ -23,8 +23,13 @@ export default function ConversationItem({ conversation }) {
           </p>
           <div className="flex flex-row items-center text-base text-gray-600">
             <p className="truncate">
-            {conversation.lastMessage ? (
-                conversation.lastMessage
+              {conversation.lastMessage ? (
+                `${
+                  conversation.users[0].id === conversation.lastMessageSenderId
+                    ? ""
+                    : "You: "
+                }
+                ${conversation.lastMessage}`
               ) : (
                 <strong>Start a new conversation.</strong>
               )}

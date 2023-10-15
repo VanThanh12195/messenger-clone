@@ -26,6 +26,7 @@ export default function ConversationList({
         {
           ...modifiedConversation,
           lastMessage: data.body,
+          lastMessageSenderId: data.senderId,
           lastMessageAt: data.createdAt,
         },
         ...conversations,

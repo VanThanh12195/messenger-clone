@@ -2,6 +2,7 @@ import prisma from "./getPrismaClient";
 import getServerSideSession from "./getServerSideSession";
 
 export default async function getAllConversation() {
+
   const session = await getServerSideSession();
 
   const currentUserId = session.user.id;
@@ -17,6 +18,7 @@ export default async function getAllConversation() {
       isGroup: true,
       lastMessage: true,
       lastMessageAt: true,
+      lastMessageSenderId:true,
       users: {
         select: {
           id: true,

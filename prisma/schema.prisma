@@ -32,6 +32,7 @@ model Conversation {
   lastMessageAt DateTime @default(now())
   name          String?
   lastMessage   String?
+  lastMessageSenderId String?
   isGroup       Boolean?
   messagesIds String[]  @db.ObjectId
   messages    Message[]

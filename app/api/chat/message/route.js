@@ -25,6 +25,7 @@ export async function POST(request) {
       body: message,
       image: null,
       conversationId: conversationId,
+      senderId:currentUserId,
       document: null,
       createdAt: new Date(),
     });
@@ -52,6 +53,7 @@ export async function POST(request) {
     },
     data: {
       lastMessage: message,
+      lastMessageSenderId: currentUserId,
       lastMessageAt: new Date(),
       messages: {
         connect: {

@@ -1,9 +1,10 @@
 import { GrSearch } from "react-icons/gr";
 
 export default function ConversationSearchBar() {
+
   return (
     <div className="p-4">
-      <form onSubmit="">
+      <form>
         <div className="relative">
           <label>
             <input
