@@ -19,7 +19,7 @@ export default function ConversationList({
       for (let i = 0; i < conversations.length; i++) {
         if (conversations[i].id === data.conversationId) {
           modifiedConversation = conversations.splice(i, 1)[0];
-          break;
+          break; 
         }
       }
       setConversations([

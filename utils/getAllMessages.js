@@ -19,7 +19,7 @@ export default async function getAllMessages(conversationId) {
           id: true,
           name: true,
           image: true,
-          email:true
+          email: true,
         },
         where: {
           id: {
