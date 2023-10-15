@@ -2,6 +2,7 @@
 
 import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function ConversationItem({ conversation }) {
   const router = useRouter();
@@ -9,6 +10,9 @@ export default function ConversationItem({ conversation }) {
   function handleNavigate() {
     router.push(`/chatroom/${conversation.id}`);
   }
+
+  const [isServer, setServer] = useState(true);
+  useEffect(setServer, []);
 
   return (
     <div
@@ -43,7 +47,10 @@ export default function ConversationItem({ conversation }) {
             )}
           </p>
           <p className="w-20 ml-2">
-            &#8226; {formatRelativeTime(new Date(conversation.lastMessageAt))}
+            &#8226;{" "}
+            {isServer
+              ? ""
+              : formatRelativeTime(new Date(conversation.lastMessageAt))}
           </p>
         </div>
       </div>
