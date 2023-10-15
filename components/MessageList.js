@@ -23,15 +23,14 @@ export default function MessageList({
   }
   const [messages, setMessages] = usePersistedState(conversationId, []);
 
-  console.log(messages);
   useEffect(() => {
-    messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
+    // messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
 
     pusherClient.subscribe(conversationId);
 
     function messageHandler(data) {
       setMessages((prevMessages) => [...prevMessages, data]);
-      messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
+      // messageListRef?.current?.scrollIntoView({ behavior: "smooth" });
     }
 
     pusherClient.bind("messages:new", messageHandler);
@@ -42,8 +41,12 @@ export default function MessageList({
     };
   }, [conversationId]);
 
+  useEffect(() => {
+    messageListRef?.current?.scrollIntoView({ behavior: "auto" });
+  }, [messages]);
+
   const initialMessageList = useMemo(() => {
-    return initialMessages.map((message) => (
+    return initialMessages.map((message, index) => (
       <MessageItem
         message={message}
         key={message.id}
@@ -52,7 +55,7 @@ export default function MessageList({
     ));
   }, [initialMessages, currentUserId]);
 
-  const messageList = messages.map((message) => {
+  const messageList = messages.map((message, index) => {
     return (
       <MessageItem
         message={message}
