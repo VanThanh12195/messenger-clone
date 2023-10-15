@@ -10,8 +10,6 @@ export default function ConversationList({
 }) {
   const [conversations, setConversations] = useState(initialConversations);
 
-  if (!conversations) return <div>No conversations!</div>;
-
   useEffect(() => {
     pusherClient.subscribe(currentUserEmail);
 
@@ -54,5 +52,9 @@ export default function ConversationList({
     );
   });
 
-  return conversationsList;
+  return conversationsList.length === 0 ? (
+    <div className="text-center text-2xl">No conversations!</div>
+  ) : (
+    conversationsList
+  );
 }

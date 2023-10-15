@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 
 import prisma from "@/utils/getPrismaClient";
 
-import getCurrentUser from "@/utils/getCurrentUser";
-
 import { pusherServer } from "@/utils/pusher";
 import getServerSideSession from "@/utils/getServerSideSession";
 
