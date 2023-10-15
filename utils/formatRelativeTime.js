@@ -2,8 +2,10 @@ import { formatDistanceToNow } from "date-fns";
 
 export const formatRelativeTime = (date) => {
   const distance = formatDistanceToNow(date, {
-    includeSeconds: true,
+    // includeSeconds: true,
   });
+
+  if (distance === "less than a minute") return "1m";
 
   const parts = distance.match(/(\d+)\s(\w+)/);
 
@@ -12,8 +14,6 @@ export const formatRelativeTime = (date) => {
     const timeUnit = parts[2];
 
     if (timeUnit.includes("month")) return `${numericValue}mo`;
-
-    if (timeUnit.includes("second") && numericValue < 59) return "1m";
 
     if (timeUnit.includes("day") && numericValue > 6)
       return `${parseInt(numericValue / 7)}w`;

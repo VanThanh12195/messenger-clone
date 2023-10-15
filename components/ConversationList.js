@@ -47,7 +47,7 @@ export default function ConversationList({
     };
   }, [conversations]);
 
-  const conversationsList = conversations.map((conversation) => {
+  const conversationsList = conversations.map((conversation, index) => {
     return (
       <ConversationItem conversation={conversation} key={conversation.id} />
     );

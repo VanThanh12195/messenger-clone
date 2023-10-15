@@ -4,8 +4,7 @@ import { formatRelativeTime } from "@/utils/formatRelativeTime";
 import { useRouter } from "next/navigation";
 
 export default function ConversationItem({ conversation }) {
-
-  const router = useRouter()
+  const router = useRouter();
 
   function handleNavigate() {
     router.push(`/chatroom/${conversation.id}`);
