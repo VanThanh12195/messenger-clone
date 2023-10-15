@@ -11,6 +11,7 @@ export default function ConversationItem({ conversation }) {
     router.push(`/chatroom/${conversation.id}`);
   }
 
+  // prevent the hydration issue, when compare html of client and server side rendering.
   const [isServer, setServer] = useState(true);
   useEffect(setServer, []);
 
@@ -49,7 +50,7 @@ export default function ConversationItem({ conversation }) {
           <p className="w-20 ml-2">
             &#8226;{" "}
             {isServer
-              ? ""
+              ? formatRelativeTime(new Date(conversation.lastMessageAt))
               : formatRelativeTime(new Date(conversation.lastMessageAt))}
           </p>
         </div>
